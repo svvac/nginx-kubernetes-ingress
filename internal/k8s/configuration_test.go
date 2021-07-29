@@ -3205,7 +3205,11 @@ func TestGetResources(t *testing.T) {
 	gc := createTestGlobalConfiguration(listeners)
 
 	configuration := createTestConfiguration()
-	configuration.AddOrUpdateGlobalConfiguration(gc)
+
+	_, _, err := configuration.AddOrUpdateGlobalConfiguration(gc)
+	if err != nil {
+		t.Fatalf("AddOrUpdateGlobalConfiguration() returned unexpected error %v", err)
+	}
 	configuration.AddOrUpdateIngress(ing)
 	configuration.AddOrUpdateVirtualServer(vs)
 	configuration.AddOrUpdateTransportServer(passTS)

@@ -1020,6 +1020,7 @@ func (cnf *Configurator) reload(isEndpointsUpdate bool) error {
 }
 
 // UpdateConfig updates NGINX configuration parameters.
+//gocyclo:ignore
 func (cnf *Configurator) UpdateConfig(cfgParams *ConfigParams, resources ExtendedResources) (Warnings, error) {
 	cnf.cfgParams = cfgParams
 	allWarnings := newWarnings()
