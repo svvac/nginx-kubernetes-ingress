@@ -597,7 +597,7 @@ func (c *Configuration) DeleteGlobalConfiguration() ([]ResourceChange, []Configu
 	return changes, problems
 }
 
-// GetGlobalConfiguration
+// GetGlobalConfiguration returns the current GlobalConfiguration.
 func (c *Configuration) GetGlobalConfiguration() *conf_v1alpha1.GlobalConfiguration {
 	c.lock.Lock()
 	defer c.lock.Unlock()
