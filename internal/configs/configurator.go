@@ -1082,12 +1082,11 @@ func (cnf *Configurator) UpdateConfig(cfgParams *ConfigParams, resources Extende
 		}
 		allWarnings.Add(warnings)
 	}
-	for _, tsEx := range resources.TransportServerExes {
-		err := cnf.addOrUpdateTransportServer(tsEx)
-		if err != nil {
-			return allWarnings, err
-		}
-	}
+
+	// we don't need to regenerate config for TransportServers, because:
+	// (1) Changes to the ConfigMap don't affect TransportServer configs directly
+	// (2) addOrUpdateTransportServer doesn't return any warnings that we need to propagate to the caller.
+	// if (1) and (2) is no longer the case, we need to generate the config for TransportServers
 
 	if mainCfg.OpenTracingLoadModule {
 		if err := cnf.addOrUpdateOpenTracingTracerConfig(mainCfg.OpenTracingTracerConfig); err != nil {
