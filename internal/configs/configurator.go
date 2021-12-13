@@ -55,6 +55,9 @@ const WildcardSecretName = "wildcard"
 // JWTKeyKey is the key of the data field of a Secret where the JWK must be stored.
 const JWTKeyKey = "jwk"
 
+// HtpasswdFileKey is the key of the data field of a Secret where the HTTP basic authorization list must be stored
+const HtpasswdFileKey = "htpasswd"
+
 // CAKey is the key of the data field of a Secret where the cert must be stored.
 const CAKey = "ca.crt"
 
@@ -650,6 +653,12 @@ func (cnf *Configurator) addOrUpdateJWKSecret(secret *api_v1.Secret) string {
 	name := objectMetaToFileName(&secret.ObjectMeta)
 	data := secret.Data[JWTKeyKey]
 	return cnf.nginxManager.CreateSecret(name, data, nginx.JWKSecretFileMode)
+}
+
+func (cnf *Configurator) addOrUpdateHtpasswdSecret(secret *api_v1.Secret) string {
+	name := objectMetaToFileName(&secret.ObjectMeta)
+	data := secret.Data[HtpasswdFileKey]
+	return cnf.nginxManager.CreateSecret(name, data, nginx.HtpasswdSecretFileMode)
 }
 
 // AddOrUpdateResources adds or updates configuration for resources.
@@ -1507,6 +1516,8 @@ func (cnf *Configurator) AddOrUpdateSecret(secret *api_v1.Secret) string {
 		return cnf.addOrUpdateCASecret(secret)
 	case secrets.SecretTypeJWK:
 		return cnf.addOrUpdateJWKSecret(secret)
+	case secrets.SecretTypeHtpasswd:
+		return cnf.addOrUpdateHtpasswdSecret(secret)
 	case secrets.SecretTypeOIDC:
 		// OIDC ClientSecret is not required on the filesystem, it is written directly to the config file.
 		return ""
