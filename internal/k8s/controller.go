@@ -2182,6 +2182,18 @@ func (lbc *LoadBalancerController) createIngressEx(ing *networking.Ingress, vali
 		ingEx.SecretRefs[secretName] = secretRef
 	}
 
+	if basicAuth, exists := ingEx.Ingress.Annotations[configs.BasicAuthSecretAnnotation]; exists {
+		secretName := basicAuth
+		secretKey := ing.Namespace + "/" + secretName
+
+		secretRef := lbc.secretStore.GetSecret(secretKey)
+		if secretRef.Error != nil {
+			glog.Warningf("Error trying to get the secret %v for Ingress %v/%v: %v", secretName, ing.Namespace, ing.Name, secretRef.Error)
+		}
+
+		ingEx.SecretRefs[secretName] = secretRef
+	}
+
 	if lbc.isNginxPlus {
 		if jwtKey, exists := ingEx.Ingress.Annotations[configs.JWTKeyAnnotation]; exists {
 			secretName := jwtKey

@@ -82,6 +82,11 @@ server {
 	}
 	{{- end}}
 
+	{{- with $server.BasicAuth }}
+    auth_basic {{ printf "%q" .Realm }};
+    auth_basic_user_file {{ .Secret }};
+	{{- end }}
+
 	{{- if $server.ServerSnippets}}
 	{{range $value := $server.ServerSnippets}}
 	{{$value}}{{end}}
@@ -116,6 +121,11 @@ server {
 		{{range $value := $location.LocationSnippets}}
 		{{$value}}{{end}}
 		{{- end}}
+
+		{{- with $location.BasicAuth }}
+		auth_basic {{ printf "%q" .Realm }};
+		auth_basic_user_file {{ .Secret }};
+		{{- end }}
 
 		grpc_connect_timeout {{$location.ProxyConnectTimeout}};
 		grpc_read_timeout {{$location.ProxyReadTimeout}};
