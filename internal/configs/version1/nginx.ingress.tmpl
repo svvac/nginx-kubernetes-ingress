@@ -83,8 +83,8 @@ server {
 	{{- end}}
 
 	{{- with $server.BasicAuth }}
-    auth_basic {{ printf "%q" .Realm }};
-    auth_basic_user_file {{ .Secret }};
+	auth_basic {{ printf "%q" .Realm }};
+	auth_basic_user_file {{ .Secret }};
 	{{- end }}
 
 	{{- if $server.ServerSnippets}}
@@ -158,6 +158,11 @@ server {
 		{{range $value := $location.LocationSnippets}}
 		{{$value}}{{end}}
 		{{- end}}
+
+		{{- with $location.BasicAuth }}
+		auth_basic {{ printf "%q" .Realm }};
+		auth_basic_user_file {{ .Secret }};
+		{{- end }}
 
 		proxy_connect_timeout {{$location.ProxyConnectTimeout}};
 		proxy_read_timeout {{$location.ProxyReadTimeout}};

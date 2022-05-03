@@ -262,6 +262,11 @@ server {
 		{{end}}
 		{{end}}
 
+		{{- with $location.BasicAuth }}
+		auth_basic {{ printf "%q" .Realm }};
+		auth_basic_user_file {{ .Secret }};
+		{{- end }}
+
 		proxy_connect_timeout {{$location.ProxyConnectTimeout}};
 		proxy_read_timeout {{$location.ProxyReadTimeout}};
 		proxy_send_timeout {{$location.ProxySendTimeout}};
