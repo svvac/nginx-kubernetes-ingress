@@ -32,7 +32,7 @@ const SecretTypeJWK api_v1.SecretType = "nginx.org/jwk"
 const SecretTypeOIDC api_v1.SecretType = "nginx.org/oidc"
 
 // SecretTypeHtpasswd contains an htpasswd file for use in HTTP Basic authorization.. #nosec G101
-const SecretTypeHtpasswd api_v1.SecretType = "nginx.org/htpasswd"
+const SecretTypeHtpasswd api_v1.SecretType = "nginx.org/htpasswd" // #nosec G101
 
 // ValidateTLSSecret validates the secret. If it is valid, the function returns nil.
 func ValidateTLSSecret(secret *api_v1.Secret) error {
@@ -119,7 +119,7 @@ func ValidateHtpasswdSecret(secret *api_v1.Secret) error {
 		return fmt.Errorf("Htpasswd secret must have the data field %v", HtpasswdFileKey)
 	}
 
-	// we don't validate the contents of secret.Data[HtpasswdFileKey], because invalid contents will not make NGINX Plus
+	// we don't validate the contents of secret.Data[HtpasswdFileKey], because invalid contents will not make NGINX
 	// fail to reload: NGINX will return 403 responses for the affected URLs.
 
 	return nil
