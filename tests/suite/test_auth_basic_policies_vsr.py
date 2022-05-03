@@ -1,4 +1,4 @@
-import pytest, requests, time
+import pytest, requests
 from base64 import b64encode
 from kubernetes.client.rest import ApiException
 from suite.resources_utils import (
