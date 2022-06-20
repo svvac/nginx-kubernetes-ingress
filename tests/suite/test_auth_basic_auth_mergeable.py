@@ -162,10 +162,4 @@ def execute_checks(auth_basic_auth_setup, expected_results) -> None:
                                 "authorization": f"Basic {to_base64(auth_basic_auth_setup.credentials_dict[expected['creds_type']])}",
                             },
                             allow_redirects=False)
-
-        # FIXME: delete this
-        print("expected: ", expected)
-        print("req_url: ", req_url)
-        print("resp: ", resp)
-
         assert resp.status_code == expected['response_code']
