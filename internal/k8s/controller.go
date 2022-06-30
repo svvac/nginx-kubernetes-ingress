@@ -342,7 +342,9 @@ func NewLoadBalancerController(input NewLoadBalancerControllerInput) *LoadBalanc
 		input.GlobalConfigurationValidator,
 		input.TransportServerValidator,
 		input.IsTLSPassthroughEnabled,
-		input.SnippetsEnabled)
+		input.SnippetsEnabled,
+		input.CertManagerEnabled,
+	)
 
 	lbc.appProtectConfiguration = appprotect.NewConfiguration()
 	lbc.dosConfiguration = appprotectdos.NewConfiguration(input.AppProtectDosEnabled)
@@ -2372,13 +2374,6 @@ func (lbc *LoadBalancerController) getAppProtectLogConfAndDst(ing *networking.In
 	logConfNsNs := appprotectcommon.ParseResourceReferenceAnnotationList(ing.Namespace, ing.Annotations[configs.AppProtectLogConfAnnotation])
 	if len(logDsts) != len(logConfNsNs) {
 		return apLogs, fmt.Errorf("Error Validating App Protect Destination and Config for Ingress %v: LogConf and LogDestination must have equal number of items", ing.Name)
-	}
-
-	for _, logDst := range logDsts {
-		err := validation.ValidateAppProtectLogDestination(logDst)
-		if err != nil {
-			return apLogs, fmt.Errorf("Error Validating App Protect Destination Config for Ingress %v: %w", ing.Name, err)
-		}
 	}
 
 	for i, logConfNsN := range logConfNsNs {
